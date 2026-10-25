@@ -12,7 +12,9 @@
 
 | 项 | 内容 |
 | --- | --- |
-| **可玩链接** | `https://<你的用户名>.github.io/prism-seventh-night/` |
+| **可玩链接** | **https://holmesz.github.io/prism-seventh-night/** |
+| **源码仓库** | https://github.com/HolmesZ/prism-seventh-night |
+| **主角卡链接** | https://holmesz.github.io/prism-seventh-night/docs/character-card.html |
 | **备用链接** | 直接上传根目录的 `index.html`（单页即可玩，`assets/` 只影响主角卡配图） |
 | **备用压缩包** | 整个仓库打包的 `.zip`（未上线时按赛道说明上传） |
 | **适配** | 桌面 1440×900 / 1080p、手机 390×844（竖屏摇杆操作）、平板横竖屏 |

@@ -10,6 +10,15 @@
 - 形态：纯静态网页（HTML + CSS + Canvas 2D + WebAudio），零依赖、零构建
 - 体积：三个文件 + 素材，双击 `index.html` 就能玩
 
+## 在线游玩
+
+| 入口 | 链接 |
+| --- | --- |
+| 🎮 **直接开玩** | **https://holmesz.github.io/prism-seventh-night/** |
+| 🪪 主角卡（网页版） | https://holmesz.github.io/prism-seventh-night/docs/character-card.html |
+| 💻 源码仓库 | https://github.com/HolmesZ/prism-seventh-night |
+| 🖼️ 主角卡（PNG） | [assets/character-card.png](assets/character-card.png) |
+
 ---
 
 ## 一分钟上手
@@ -61,31 +70,36 @@ npx serve .                 # 或 python -m http.server 8080
 
 ---
 
-## 部署到 GitHub Pages（公开可玩链接）
+## 部署到 GitHub Pages（本项目已完成部署）
 
-### 方式 A：GitHub Actions（推荐，已随仓库提供）
+线上地址：**https://holmesz.github.io/prism-seventh-night/** —— 由仓库自带的工作流自动发布，`main` 分支每次推送后会重新部署（约 40 秒）。
+
+### 已完成的配置（本仓库现状）
+
+| 项 | 值 |
+| --- | --- |
+| Pages 构建方式 | GitHub Actions（`build_type: workflow`） |
+| 触发条件 | 推送到 `main` 或手动 `workflow_dispatch` |
+| 发布流程 | `.github/workflows/pages.yml`：准备 `_site/` → configure-pages → upload-pages-artifact → deploy-pages |
+| 站点根 | 仓库根目录（`.nojekyll` 已包含） |
+
+### 换一个仓库时怎么重新做一遍
 
 1. 新建仓库并推送：
 
    ```bash
    git init
    git add .
-   git commit -m "feat: PRISM · The Seventh Night — 1024 切磋大会 游戏赛道"
+   git commit -m "feat: PRISM · The Seventh Night"
    git branch -M main
-   git remote add origin https://github.com/<你的用户名>/prism-seventh-night.git
+   git remote add origin https://github.com/<你的用户名>/<仓库名>.git
    git push -u origin main
    ```
 
-2. 打开仓库 **Settings → Pages → Build and deployment → Source**，选择 **GitHub Actions**。
-3. 等待 `Deploy to GitHub Pages` workflow 跑完（约 1 分钟），游戏地址：
+2. 打开仓库 **Settings → Pages → Build and deployment → Source**，选择 **GitHub Actions**（工作流里也带了 `enablement: true`，多数情况下会自动开启）。
+3. 等待 `Deploy to GitHub Pages` 跑完（约 40 秒），地址即 `https://<你的用户名>.github.io/<仓库名>/`。
 
-   ```
-   https://<你的用户名>.github.io/prism-seventh-night/
-   ```
-
-   主角卡地址：`https://<你的用户名>.github.io/prism-seventh-night/docs/character-card.html`
-
-### 方式 B：直接从分支部署
+### 方式 B：直接从分支部署（不想用 Actions 时）
 
 **Settings → Pages → Source: Deploy from a branch → Branch: `main` / `(root)`** 即可，仓库根目录就是站点根目录（已包含 `.nojekyll`）。
 
