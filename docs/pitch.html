@@ -1,0 +1,1253 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>棱镜逆流 · 第七夜 — 路演 | 1024 切磋大会 · 游戏赛道</title>
+<meta name="description" content="《棱镜逆流 · 第七夜》路演：一枚会记住光的棱镜，把射向星核的子弹一颗一颗还回去。零依赖网页弹幕反射游戏。">
+<style>
+  :root {
+    --ink: #03060c;
+    --ink-2: #071019;
+    --paper: #eafcff;
+    --muted: rgba(196, 226, 240, 0.62);
+    --faint: rgba(160, 214, 232, 0.26);
+    --cyan: #6df7ff;
+    --cyan-strong: #c8feff;
+    --magenta: #ff58d8;
+    --violet: #8d7bff;
+    --amber: #ffc46b;
+    --line: rgba(109, 247, 255, 0.16);
+    --display: "Bahnschrift", "DIN Alternate", "Arial Narrow", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --body: "Segoe UI", "Noto Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+    --mono: "Cascadia Code", Consolas, "Liberation Mono", monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    height: 100%;
+    background: #01030a;
+    color: var(--paper);
+    font-family: var(--body);
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  #app {
+    position: fixed;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    background:
+      radial-gradient(ellipse at 50% 45%, #06121f 0%, #02040b 60%, #010206 100%);
+  }
+
+  #stage {
+    position: relative;
+    width: 1280px;
+    height: 720px;
+    transform-origin: center center;
+    background:
+      radial-gradient(ellipse 70% 60% at 50% 40%, rgba(15, 48, 72, 0.55), transparent 72%),
+      radial-gradient(ellipse 40% 40% at 12% 10%, rgba(255, 88, 216, 0.08), transparent 70%),
+      radial-gradient(ellipse 40% 40% at 88% 88%, rgba(109, 247, 255, 0.07), transparent 70%),
+      #03060c;
+    overflow: hidden;
+    box-shadow: 0 40px 120px rgba(0, 0, 0, 0.7);
+  }
+
+  #stage::before {
+    content: "";
+    position: absolute;
+    inset: 16px;
+    border: 1px solid rgba(109, 247, 255, 0.1);
+    pointer-events: none;
+    z-index: 60;
+  }
+
+  #stage::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(109, 247, 255, 0.028) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(109, 247, 255, 0.028) 1px, transparent 1px);
+    background-size: 64px 64px;
+    mask-image: radial-gradient(ellipse at 50% 50%, #000 25%, transparent 80%);
+    -webkit-mask-image: radial-gradient(ellipse at 50% 50%, #000 25%, transparent 80%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ---------- slides ---------- */
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: none;
+    flex-direction: column;
+    padding: 54px 68px 62px;
+  }
+
+  .slide.on { display: flex; animation: slide-in 0.42s ease both; }
+  .slide.on .anim { animation: rise-in 0.5s cubic-bezier(0.22, 0.8, 0.3, 1) both; }
+  .slide.on .anim:nth-child(1) { animation-delay: 0.04s; }
+  .slide.on .anim:nth-child(2) { animation-delay: 0.1s; }
+  .slide.on .anim:nth-child(3) { animation-delay: 0.16s; }
+  .slide.on .anim:nth-child(4) { animation-delay: 0.22s; }
+  .slide.on .anim:nth-child(5) { animation-delay: 0.28s; }
+
+  @keyframes slide-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  @keyframes rise-in {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ---------- typography ---------- */
+
+  .kicker {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--mono);
+    font-size: 11.5px;
+    letter-spacing: 0.24em;
+    color: rgba(109, 247, 255, 0.55);
+    text-transform: uppercase;
+  }
+
+  .kicker b {
+    color: rgba(196, 226, 240, 0.32);
+    font-weight: 400;
+  }
+
+  .kicker .dot {
+    width: 5px;
+    height: 5px;
+    background: var(--cyan);
+    border-radius: 50%;
+    box-shadow: 0 0 10px var(--cyan);
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.4; transform: scale(0.85); }
+    50% { opacity: 1; transform: scale(1.15); }
+  }
+
+  h1 {
+    margin: 14px 0 0;
+    font-family: var(--display);
+    font-size: 62px;
+    line-height: 1.02;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: #f2feff;
+    text-shadow: 0 0 46px rgba(109, 247, 255, 0.28);
+  }
+
+  h2 {
+    margin: 10px 0 0;
+    font-family: var(--display);
+    font-size: 38px;
+    line-height: 1.12;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    color: #ecfeff;
+  }
+
+  h2 em {
+    font-style: normal;
+    color: var(--cyan);
+    text-shadow: 0 0 26px rgba(109, 247, 255, 0.55);
+  }
+
+  .lead {
+    margin: 12px 0 0;
+    font-size: 17px;
+    line-height: 1.7;
+    color: rgba(205, 232, 246, 0.72);
+  }
+
+  .lead strong { color: var(--cyan-strong); font-weight: 600; }
+
+  .sub {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    color: rgba(160, 210, 232, 0.42);
+  }
+
+  .accent-amber { color: var(--amber); }
+  .accent-mag { color: var(--magenta); }
+
+  /* ---------- layout ---------- */
+
+  .body { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 26px; min-height: 0; padding-top: 8px; }
+  .spread { display: flex; align-items: center; justify-content: space-between; gap: 34px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+  .grow { flex: 1; min-width: 0; min-height: 0; }
+
+  /* ---------- components ---------- */
+
+  .card {
+    border: 1px solid var(--line);
+    background: linear-gradient(180deg, rgba(9, 26, 40, 0.62), rgba(4, 9, 16, 0.34));
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    min-width: 0;
+  }
+
+  .card .idx {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.2em;
+    color: rgba(109, 247, 255, 0.5);
+  }
+
+  .card h3 {
+    margin: 0;
+    font-family: var(--display);
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: #e4fcff;
+  }
+
+  .card p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.65;
+    color: rgba(196, 226, 240, 0.6);
+  }
+
+  .shot {
+    position: relative;
+    border: 1px solid var(--line);
+    overflow: hidden;
+    background: #01050b;
+    min-height: 0;
+  }
+
+  .shot img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 45%;
+  }
+
+  .shot figcaption {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 12px;
+    font-family: var(--mono);
+    font-size: 9.5px;
+    letter-spacing: 0.14em;
+    color: rgba(196, 226, 240, 0.5);
+    background: linear-gradient(180deg, transparent, rgba(2, 6, 12, 0.92));
+  }
+
+  .shot figcaption b { color: var(--cyan); font-weight: 600; }
+
+  .stat {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 12px 16px;
+    border-left: 2px solid rgba(109, 247, 255, 0.4);
+    background: linear-gradient(90deg, rgba(109, 247, 255, 0.06), transparent);
+  }
+
+  .stat b {
+    font-family: var(--display);
+    font-size: 30px;
+    line-height: 1;
+    color: #eafeff;
+    letter-spacing: 0.02em;
+  }
+
+  .stat span {
+    font-family: var(--mono);
+    font-size: 9.5px;
+    letter-spacing: 0.16em;
+    color: rgba(196, 226, 240, 0.42);
+  }
+
+  .step {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 14px 14px 14px 0;
+    min-width: 0;
+  }
+
+  .step .n {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: rgba(109, 247, 255, 0.45);
+  }
+
+  .step strong {
+    font-family: var(--display);
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    color: #e8fdff;
+  }
+
+  .step span {
+    font-size: 12px;
+    line-height: 1.55;
+    color: rgba(196, 226, 240, 0.55);
+  }
+
+  .flow {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    align-items: stretch;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 6px 0;
+  }
+
+  .flow .step + .step { border-left: 1px solid rgba(109, 247, 255, 0.1); padding-left: 14px; }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 11px;
+    border: 1px solid rgba(109, 247, 255, 0.28);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    color: var(--cyan);
+    white-space: nowrap;
+  }
+
+  .pill.mag { border-color: rgba(255, 88, 216, 0.34); color: #ffb8ec; }
+  .pill.amber { border-color: rgba(255, 196, 107, 0.34); color: #ffd79a; }
+  .pill.ghost { border-color: rgba(196, 226, 240, 0.16); color: rgba(196, 226, 240, 0.5); }
+
+  .quote {
+    font-size: 15px;
+    line-height: 1.8;
+    color: rgba(255, 214, 158, 0.9);
+    border-left: 2px solid rgba(255, 196, 107, 0.45);
+    padding-left: 14px;
+  }
+
+  .keys { display: flex; flex-wrap: wrap; gap: 10px; }
+
+  .kv {
+    display: grid;
+    grid-template-columns: 96px 1fr;
+    gap: 14px;
+    align-items: baseline;
+    padding: 11px 0;
+    border-bottom: 1px dashed rgba(109, 247, 255, 0.1);
+  }
+
+  .kv:last-child { border-bottom: 0; }
+  .kv dt { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; color: rgba(109, 247, 255, 0.5); }
+  .kv dd { margin: 0; font-size: 13.5px; line-height: 1.6; color: rgba(220, 244, 252, 0.82); }
+
+  table.check { width: 100%; border-collapse: collapse; }
+  table.check th, table.check td {
+    text-align: left;
+    padding: 13px 12px;
+    border-bottom: 1px solid rgba(109, 247, 255, 0.1);
+    vertical-align: middle;
+  }
+  table.check th {
+    font-family: var(--mono);
+    font-size: 9.5px;
+    letter-spacing: 0.2em;
+    color: rgba(109, 247, 255, 0.5);
+    font-weight: 400;
+  }
+  table.check td { font-size: 13px; color: rgba(214, 240, 250, 0.78); line-height: 1.5; }
+  table.check td:first-child { color: #e8fdff; font-weight: 600; width: 168px; }
+  table.check td.mark { width: 42px; color: var(--cyan); font-size: 15px; }
+
+  /* ---------- cover ---------- */
+
+  .cover-bg {
+    position: absolute;
+    inset: 0;
+    background-image: url("../assets/shots/play.png");
+    background-size: cover;
+    background-position: center 42%;
+    opacity: 0.46;
+    filter: saturate(1.2);
+  }
+
+  .cover-bg::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(90deg, rgba(2, 5, 12, 0.96) 0%, rgba(2, 5, 12, 0.74) 44%, rgba(2, 5, 12, 0.18) 100%),
+      linear-gradient(180deg, rgba(2, 5, 12, 0.35), transparent 30%, transparent 62%, rgba(2, 5, 12, 0.82) 100%);
+  }
+
+  .cover-hero {
+    position: absolute;
+    right: 66px;
+    top: 50%;
+    transform: translateY(-47%);
+    height: 468px;
+    z-index: 2;
+    filter: drop-shadow(0 0 64px rgba(109, 247, 255, 0.22));
+    pointer-events: none;
+  }
+
+  .cover-hero::before {
+    content: "";
+    position: absolute;
+    inset: -16%;
+    background: radial-gradient(circle, rgba(30, 104, 140, 0.42), transparent 66%);
+    z-index: -1;
+  }
+
+  .cover-hero img { height: 100%; width: auto; display: block; }
+
+  .cover-inner { position: relative; z-index: 3; display: flex; flex-direction: column; height: 100%; justify-content: center; max-width: 760px; }
+
+  .cover h1 { font-size: 84px; letter-spacing: 0.02em; }
+
+  .cover .cn {
+    margin-top: 6px;
+    font-family: var(--display);
+    font-size: 26px;
+    letter-spacing: 0.42em;
+    color: rgba(200, 254, 255, 0.72);
+  }
+
+  .cover .one {
+    margin-top: 26px;
+    max-width: 640px;
+    font-size: 19px;
+    line-height: 1.75;
+    color: rgba(214, 240, 250, 0.82);
+  }
+
+  .cover .one em { font-style: normal; color: var(--cyan); }
+
+  .cover-foot {
+    margin-top: 38px;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding-top: 22px;
+    border-top: 1px solid rgba(109, 247, 255, 0.14);
+    max-width: 760px;
+  }
+
+  .cover-foot .url {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    color: rgba(196, 226, 240, 0.62);
+  }
+
+  .cover-foot .url b { color: var(--cyan); font-weight: 500; }
+
+  /* ---------- ending slide ---------- */
+
+  .end-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 55% 60% at 74% 46%, rgba(22, 78, 108, 0.34), transparent 70%),
+      radial-gradient(ellipse 60% 50% at 20% 10%, rgba(255, 88, 216, 0.07), transparent 70%);
+  }
+
+  .end-hero {
+    position: absolute;
+    right: -30px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 620px;
+    height: 620px;
+    z-index: 1;
+    opacity: 0.52;
+    pointer-events: none;
+    -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 30%, transparent 68%);
+    mask-image: radial-gradient(circle at 50% 50%, #000 30%, transparent 68%);
+  }
+
+  .end-hero img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  .end-bg::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgba(2, 5, 12, 0.9) 0%, rgba(2, 5, 12, 0.34) 40%, rgba(2, 5, 12, 0.96) 92%),
+      linear-gradient(90deg, rgba(2, 5, 12, 0.94) 0%, rgba(2, 5, 12, 0.55) 42%, rgba(2, 5, 12, 0.12) 100%);
+  }
+
+  /* ---------- portrait ---------- */
+
+  .portrait {
+    position: relative;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--line);
+    background:
+      radial-gradient(ellipse 62% 58% at 50% 46%, rgba(24, 88, 124, 0.34), transparent 72%),
+      linear-gradient(180deg, rgba(8, 22, 34, 0.6), rgba(3, 7, 12, 0.4));
+    overflow: hidden;
+    min-height: 0;
+  }
+
+  .portrait img { max-height: 100%; max-width: 86%; filter: drop-shadow(0 0 42px rgba(109, 247, 255, 0.24)); }
+
+  .portrait figcaption {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 16px;
+    text-align: center;
+    font-family: var(--display);
+    font-size: 17px;
+    letter-spacing: 0.2em;
+    color: #eafeff;
+  }
+
+  .portrait figcaption span {
+    display: block;
+    margin-top: 4px;
+    font-family: var(--mono);
+    font-size: 9.5px;
+    letter-spacing: 0.32em;
+    color: rgba(109, 247, 255, 0.5);
+  }
+
+  .memory { display: flex; flex-direction: column; gap: 13px; }
+
+  .memory .item {
+    display: grid;
+    grid-template-columns: 30px 1fr;
+    gap: 12px;
+    align-items: start;
+    padding-bottom: 12px;
+    border-bottom: 1px dashed rgba(109, 247, 255, 0.1);
+  }
+
+  .memory .item:last-child { border-bottom: 0; padding-bottom: 0; }
+
+  .memory .item b {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    color: rgba(109, 247, 255, 0.5);
+    padding-top: 3px;
+  }
+
+  .memory .item strong {
+    display: block;
+    font-family: var(--display);
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    color: #e8fdff;
+    margin-bottom: 3px;
+  }
+
+  .memory .item span { font-size: 12.5px; line-height: 1.6; color: rgba(196, 226, 240, 0.58); }
+
+  /* ---------- night rail ---------- */
+
+  .rail { display: grid; grid-template-columns: repeat(7, 1fr); gap: 9px; }
+
+  .night {
+    position: relative;
+    padding: 15px 12px;
+    border: 1px solid rgba(109, 247, 255, 0.12);
+    background: linear-gradient(180deg, rgba(10, 28, 42, 0.6), rgba(4, 9, 16, 0.3));
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .night.boss { border-color: rgba(255, 88, 216, 0.32); background: linear-gradient(180deg, rgba(46, 10, 36, 0.6), rgba(8, 4, 12, 0.35)); }
+  .night.final { border-color: rgba(255, 196, 107, 0.4); background: linear-gradient(180deg, rgba(46, 34, 8, 0.6), rgba(12, 8, 2, 0.35)); }
+
+  .night b { font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.16em; color: rgba(109, 247, 255, 0.5); }
+  .night.boss b { color: rgba(255, 136, 224, 0.75); }
+  .night.final b { color: rgba(255, 196, 107, 0.85); }
+  .night strong { font-family: var(--display); font-size: 14px; font-weight: 600; color: #e6fdff; letter-spacing: 0.02em; }
+  .night span { font-size: 10.5px; line-height: 1.45; color: rgba(196, 226, 240, 0.45); }
+
+  /* ---------- deck chrome ---------- */
+
+  .chrome {
+    position: absolute;
+    left: 68px;
+    right: 68px;
+    bottom: 24px;
+    z-index: 55;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-family: var(--mono);
+    font-size: 9.5px;
+    letter-spacing: 0.16em;
+    color: rgba(160, 210, 232, 0.34);
+  }
+
+  .chrome .bar {
+    flex: 1;
+    height: 1px;
+    background: rgba(109, 247, 255, 0.12);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .chrome .bar i {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 0;
+    background: linear-gradient(90deg, rgba(109, 247, 255, 0.8), rgba(255, 88, 216, 0.6));
+    box-shadow: 0 0 12px rgba(109, 247, 255, 0.5);
+    transition: width 0.35s ease;
+  }
+
+  .chrome .counter b { color: var(--cyan); font-weight: 500; }
+  .chrome .hint { opacity: 0.75; }
+
+  /* ---------- toc ---------- */
+
+  #toc {
+    position: absolute;
+    inset: 0;
+    z-index: 70;
+    display: none;
+    flex-direction: column;
+    gap: 18px;
+    padding: 52px 68px 64px;
+    background: rgba(2, 5, 12, 0.96);
+    backdrop-filter: blur(6px);
+  }
+
+  #toc.on { display: flex; }
+
+  #toc .list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px 26px; align-content: start; }
+
+  #toc button {
+    display: grid;
+    grid-template-columns: 34px 1fr;
+    gap: 10px;
+    align-items: baseline;
+    padding: 9px 10px;
+    border: 1px solid transparent;
+    background: none;
+    color: rgba(214, 240, 250, 0.72);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+
+  #toc button:hover, #toc button:focus-visible {
+    border-color: rgba(109, 247, 255, 0.28);
+    background: rgba(109, 247, 255, 0.06);
+    color: #eafeff;
+    outline: none;
+  }
+
+  #toc button i {
+    font-family: var(--mono);
+    font-style: normal;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: rgba(109, 247, 255, 0.5);
+  }
+
+  #toc button b { font-weight: 500; font-size: 14px; }
+
+  /* ---------- print ---------- */
+
+  @media print {
+    html, body { overflow: visible; background: #03060c; }
+    #app { position: static; display: block; }
+    #stage { width: 1280px; height: 720px; transform: none !important; box-shadow: none; }
+    .slide { display: flex !important; opacity: 1; position: relative; height: 720px; page-break-after: always; }
+    .chrome, #toc { display: none !important; }
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="stage">
+
+    <!-- 01 封面 -->
+    <section class="slide cover on" data-title="封面">
+      <div class="cover-bg"></div>
+      <div class="cover-hero"><img src="../assets/ajing.svg" alt="阿镜"></div>
+      <div class="cover-inner">
+        <div class="kicker anim"><span class="dot"></span>1024 切磋大会 <b>·</b> 游戏赛道 <b>·</b> 路演</div>
+        <h1 class="anim">棱镜逆流 <span style="color:var(--cyan)">·</span> 第七夜</h1>
+        <div class="cn anim">PRISM · THE SEVENTH NIGHT</div>
+        <p class="one anim">
+          一枚会记住光的棱镜，<br>
+          把射向星核的子弹，<em>一颗一颗还回去</em>。
+        </p>
+        <div class="cover-foot anim">
+          <span class="pill">浏览器 / 手机 即开即玩</span>
+          <span class="pill ghost">零依赖 · 零构建</span>
+          <span class="url">▶ <b>holmesz.github.io/prism-seventh-night</b></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 02 总 -->
+    <section class="slide" data-title="总：赛道的四个问题">
+      <div class="kicker"><span class="dot"></span>PART 0 <b>//</b> 总</div>
+      <h2 class="anim">赛道的四个问题，<em>我们用一局游戏回答</em></h2>
+      <p class="lead anim">游戏赛道只有一句话：<strong>让人想再玩一局</strong>。我们把它拆成四个可被检验的问题。</p>
+
+      <div class="body">
+        <div class="grid-4 anim">
+          <div class="card">
+            <span class="idx">做什么</span>
+            <h3>一句话变出主角</h3>
+            <p>一句话生成「阿镜」：一枚会记住光的棱镜，只反弹、不攻击。</p>
+          </div>
+          <div class="card">
+            <span class="idx">用什么</span>
+            <h3>AI 生成 + AI 编程</h3>
+            <p>角色与道具由 AI 生成，再由 AI 编程工具做成零依赖网页游戏。</p>
+          </div>
+          <div class="card">
+            <span class="idx">交什么</span>
+            <h3>链接 + 完整一局</h3>
+            <p>可玩链接、七夜闭环、游戏内操作提示，外加 1 张主角卡。</p>
+          </div>
+          <div class="card">
+            <span class="idx">评委看什么</span>
+            <h3>四件事</h3>
+            <p>一看就会玩 · 能完整玩一局 · 主角有记忆点 · 玩完还想再来。</p>
+          </div>
+        </div>
+
+        <div class="spread anim" style="gap:16px;">
+          <div class="stat"><b>7</b><span>NIGHTS 七夜剧情</span></div>
+          <div class="stat"><b>5</b><span>CORE HP 星核完整度</span></div>
+          <div class="stat"><b>6</b><span>ENEMIES 敌人类型</span></div>
+          <div class="stat"><b>0</b><span>DEPENDENCIES 依赖</span></div>
+          <div class="stat"><b>1</b><span>HERO CARD 主角卡</span></div>
+        </div>
+
+        <p class="lead anim" style="margin:0;font-size:15px;">
+          所以这份路演只有一条主线：<strong>把「让人想再玩一局」拆成可以被打勾的四件事，再用一局游戏逐条做到。</strong>
+        </p>
+      </div>
+    </section>
+
+    <!-- 03 一看就会玩 -->
+    <section class="slide" data-title="分 1：一看就会玩">
+      <div class="kicker"><span class="dot"></span>PART 1 <b>//</b> 分 · 玩法</div>
+      <h2 class="anim">一看就会玩：<em>这个游戏没有攻击键</em></h2>
+
+      <div class="body">
+        <div class="spread grow anim" style="align-items:stretch;">
+          <figure class="shot grow">
+            <img src="../assets/shots/play.png" alt="游戏内画面">
+            <figcaption><span>REALTIME · CANVAS 2D</span><b>转盾即战斗</b></figcaption>
+          </figure>
+        </div>
+        <div class="grid-4 anim">
+          <div class="card"><span class="idx">01</span><h3>转盾</h3><p>鼠标 / ← → 旋转弧形棱镜，让弧面迎向弹道。</p></div>
+          <div class="card"><span class="idx">02</span><h3>反弹</h3><p>子弹撞上弧面就原路回去，变成追猎敌人的光。</p></div>
+          <div class="card"><span class="idx">03</span><h3>脉冲</h3><p>左键 / Space 震开贴身弹幕，冷却约 2.6 秒。</p></div>
+          <div class="card"><span class="idx">04</span><h3>新星</h3><p>右键 / E，能量满格让整个星图进入 0.28× 慢动作。</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 核心循环 -->
+    <section class="slide" data-title="分 2：核心循环">
+      <div class="kicker"><span class="dot"></span>PART 1 <b>//</b> 分 · 循环</div>
+      <h2 class="anim">30 秒就能理解的核心循环，<em>30 小时也刷不完</em></h2>
+      <p class="lead anim">只有一条规则：<strong>你不必开火，你只需要把光送回去。</strong></p>
+
+      <div class="body">
+        <div class="flow anim">
+          <div class="step"><span class="n">STEP 01</span><strong>子弹飞来</strong><span>黑潮把光磨成子弹，从四周压向星核。</span></div>
+          <div class="step"><span class="n">STEP 02</span><strong>弧面反弹</strong><span>护盾角度决定返航方向，接得越准越好。</span></div>
+          <div class="step"><span class="n">STEP 03</span><strong>光去追猎</strong><span>弹回的光自动追敌，击杀得分并累积连击。</span></div>
+          <div class="step"><span class="n">STEP 04</span><strong>连击倍率</strong><span>最高 ×4.5，站位决定分数上限。</span></div>
+          <div class="step"><span class="n">STEP 05</span><strong>棱镜新星</strong><span>能量满 → 全场减速 + 环形归还波。</span></div>
+        </div>
+
+        <div class="grid-3 anim">
+          <div class="card"><span class="idx">易学</span><h3>4 个操作</h3><p>移动、转盾、脉冲、新星。没有技能树、没有蓄力条。</p></div>
+          <div class="card"><span class="idx">难精</span><h3>角度 + 站位</h3><p>反弹方向由盾面决定，刷分靠"站位预设"，不是手速。</p></div>
+          <div class="card"><span class="idx">反馈</span><h3>慢动作爽感</h3><p>新星把弹幕拖慢，让玩家看清自己制造的光路。</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 05 主角 -->
+    <section class="slide" data-title="分 3：主角有记忆点">
+      <div class="kicker"><span class="dot"></span>PART 2 <b>//</b> 分 · 主角</div>
+      <h2 class="anim">主角有记忆点：<em>阿镜，一个只会「归还」的守夜人</em></h2>
+
+      <div class="body">
+        <div class="spread grow anim" style="align-items:center;">
+          <div class="portrait" style="flex:0 0 370px;height:470px;">
+            <img src="../assets/ajing.svg" alt="阿镜">
+            <figcaption>阿镜<span>A-JING · NO.07</span></figcaption>
+          </div>
+          <div class="grow" style="display:flex;flex-direction:column;justify-content:center;gap:16px;">
+            <div class="memory">
+              <div class="item">
+                <b>01</b>
+                <div>
+                  <strong>两点青色眼睛</strong>
+                  <span>即使被压到 50 像素高，玩家仍然认得出"她在看我"。</span>
+                </div>
+              </div>
+              <div class="item">
+                <b>02</b>
+                <div>
+                  <strong>两条不听话的光带</strong>
+                  <span>左边是第一位守夜人、右边是第六位留下的——前六位都碎在灯下。</span>
+                </div>
+              </div>
+              <div class="item">
+                <b>03</b>
+                <div>
+                  <strong>她没有武器，只有身体</strong>
+                  <span>不能主动开火，反弹就是她唯一的攻击方式。</span>
+                </div>
+              </div>
+            </div>
+            <p class="quote">「子弹不是给我，是给灯的。我只是把它们送回去。」</p>
+            <div class="keys">
+              <span class="pill">一句话生成</span>
+              <span class="pill mag">草图 → 立绘 → 游戏内</span>
+              <span class="pill amber">50 像素仍可辨认</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 06 主角卡 -->
+    <section class="slide" data-title="分 4：主角卡">
+      <div class="kicker"><span class="dot"></span>PART 2 <b>//</b> 分 · 主角卡</div>
+      <h2 class="anim">赛道要 1 张主角卡，<em>我们给了一条完整的生成链</em></h2>
+
+      <div class="body">
+        <div class="spread grow anim" style="align-items:stretch;">
+          <figure class="shot grow" style="background:#040810;min-height:0;">
+            <img src="../assets/character-card.png" alt="主角卡：一句话 → 草图 → 角色 → 游戏里的样子" style="object-fit:contain;background:#040810;">
+            <figcaption><span>CHARACTER CARD · 1920×1080</span><b>一句话 / 草图 / 角色 / 游戏里的样子</b></figcaption>
+          </figure>
+        </div>
+        <div class="grid-3 anim" style="gap:14px;">
+          <div class="card" style="padding:14px 16px;"><span class="idx">STEP 1</span><h3>一句话</h3><p>「一枚会记住光的棱镜，把子弹一颗一颗还回去。」</p></div>
+          <div class="card" style="padding:14px 16px;"><span class="idx">STEP 2–3</span><h3>草图 → 角色</h3><p>先定轮廓与两个记忆点，再上色成可用立绘。</p></div>
+          <div class="card" style="padding:14px 16px;"><span class="idx">STEP 4</span><h3>落到游戏里</h3><p>Canvas 2D 程序化重绘，无贴图、可任意缩放。</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 07 一局完整 -->
+    <section class="slide" data-title="分 5：能完整玩一局">
+      <div class="kicker"><span class="dot"></span>PART 3 <b>//</b> 分 · 完整一局</div>
+      <h2 class="anim">能完整玩一局：<em>七个夜晚，一个结局</em></h2>
+
+      <div class="body">
+        <div class="rail anim">
+          <div class="night"><b>01</b><strong>灯油见底</strong><span>只有最轻的游光</span></div>
+          <div class="night"><b>02</b><strong>黑潮试探</strong><span>子弹开始瞄准</span></div>
+          <div class="night"><b>03</b><strong>碎裂者</strong><span>一弹裂成三弹</span></div>
+          <div class="night"><b>04</b><strong>长矛</strong><span>蓄力后刺穿盾面</span></div>
+          <div class="night boss"><b>05</b><strong>守卫者</strong><span>第一次围城 BOSS</span></div>
+          <div class="night"><b>06</b><strong>余烬如雨</strong><span>高速碎火压境</span></div>
+          <div class="night final"><b>07</b><strong>最后的归还</strong><span>终夜守卫 · 结局</span></div>
+        </div>
+
+        <div class="spread anim" style="align-items:stretch;gap:26px;">
+          <figure class="shot" style="flex:0 0 560px;height:268px;">
+            <img src="../assets/shots/boss.png" alt="守卫者战斗">
+            <figcaption><span>WARDEN</span><b>第五夜 · 守卫者</b></figcaption>
+          </figure>
+          <div class="grow" style="display:flex;flex-direction:column;justify-content:center;gap:12px;">
+            <div class="kicker" style="font-size:10px;">COMPLETE LOOP <b>//</b> 从开始到重开</div>
+            <div class="keys">
+              <span class="pill ghost">标题</span>
+              <span class="pill ghost">序章 3 页</span>
+              <span class="pill ghost">七夜</span>
+              <span class="pill">结局面板</span>
+              <span class="pill ghost">无尽守夜 / 再走一夜</span>
+              <span class="pill ghost">失败 → 重开</span>
+            </div>
+            <p class="lead" style="margin:6px 0 0;font-size:14.5px;">
+              第七夜清场即进入结局，不会无限刷夜；失败与通关都能<strong>一键重开</strong>，不用刷新页面。
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 08 再来一局 -->
+    <section class="slide" data-title="分 6：玩完还想再来一局">
+      <div class="kicker"><span class="dot"></span>PART 3 <b>//</b> 分 · 复玩</div>
+      <h2 class="anim">玩完还想再来一局：<em>通关不是终点，是第二局的起点</em></h2>
+
+      <div class="body">
+        <div class="grid-3 anim">
+          <div class="card"><span class="idx">REASON 01</span><h3>无尽守夜</h3><p>七夜之后夜会一直数下去，看你能守到第几夜。</p></div>
+          <div class="card"><span class="idx">REASON 02</span><h3>记住你的最好</h3><p>本地保存最高分与最远夜数，随时打破自己。</p></div>
+          <div class="card"><span class="idx">REASON 03</span><h3>短局快节奏</h3><p>一夜 40–90 秒，一局 8–12 分钟，适合"再来一把"。</p></div>
+        </div>
+
+        <div class="spread grow anim" style="align-items:stretch;gap:22px;">
+          <figure class="shot grow" style="flex:1;">
+            <img src="../assets/shots/ending.png" alt="结局面板">
+            <figcaption><span>ENDING</span><b>灯还亮着 · 七夜通关</b></figcaption>
+          </figure>
+          <figure class="shot grow" style="flex:1;">
+            <img src="../assets/shots/menu.png" alt="标题页">
+            <figcaption><span>MENU</span><b>开始第七夜 / 无尽守夜 / 主角档案</b></figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
+    <!-- 09 怎么做 -->
+    <section class="slide" data-title="分 7：怎么做出来的">
+      <div class="kicker"><span class="dot"></span>PART 4 <b>//</b> 分 · 方法</div>
+      <h2 class="anim">AI 生成角色，<em>AI 编程落地成网页</em></h2>
+
+      <div class="body">
+        <div class="grid-2 anim" style="align-items:stretch;">
+          <div class="card" style="gap:12px;">
+            <span class="idx">ART PIPELINE · 生成</span>
+            <h3>角色与道具：一句话 → 草图 → 立绘 → 实时渲染</h3>
+            <table class="check">
+              <tr><td>一句话</td><td>定身份、形态、动作、情绪</td></tr>
+              <tr><td>概念草图</td><td>定轮廓、比例与两个记忆点</td></tr>
+              <tr><td>角色立绘</td><td>SVG 矢量，可无损放大到主角卡</td></tr>
+              <tr><td>游戏内</td><td>Canvas 程序化重绘，无贴图依赖</td></tr>
+            </table>
+          </div>
+          <div class="card" style="gap:12px;">
+            <span class="idx">TECH STACK · 实现</span>
+            <h3>零依赖：3 个文件 + 素材，托管即上线</h3>
+            <table class="check">
+              <tr><td>渲染</td><td>Canvas 2D，DPR 自适应，粒子封顶 620</td></tr>
+              <tr><td>音频</td><td>WebAudio 实时合成，无音频文件</td></tr>
+              <tr><td>输入</td><td>鼠标 / 键盘 / 双虚拟摇杆三套并行</td></tr>
+              <tr><td>质量</td><td><span style="font-family:var(--mono);font-size:11px;color:var(--cyan)">?selftest</span> 内置自测：反射、触控、结局全绿</td></tr>
+            </table>
+          </div>
+        </div>
+
+        <div class="keys anim">
+          <span class="pill">HTML + CSS + JS</span>
+          <span class="pill">无框架 / 无构建 / 无 npm</span>
+          <span class="pill amber">GitHub Pages 自动部署</span>
+          <span class="pill ghost">桌面 60fps · 手机 60fps</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 10 交什么 -->
+    <section class="slide" data-title="分 8：交付清单">
+      <div class="kicker"><span class="dot"></span>PART 5 <b>//</b> 分 · 交付</div>
+      <h2 class="anim">赛道要什么，<em>我们就交什么</em></h2>
+
+      <div class="body">
+        <table class="check anim">
+          <tr>
+            <th></th><th>赛道「交什么」</th><th>我们的交付</th>
+          </tr>
+          <tr>
+            <td class="mark">✓</td>
+            <td>浏览器 / 手机能直接玩的链接</td>
+            <td><span style="font-family:var(--mono);font-size:12px;color:var(--cyan)">holmesz.github.io/prism-seventh-night</span> · 零依赖，断网也能玩</td>
+          </tr>
+          <tr>
+            <td class="mark">✓</td>
+            <td>从开始到重开能完整玩一局</td>
+            <td>序章 → 七夜 → 结局 → 无尽 / 重开，全流程闭环</td>
+          </tr>
+          <tr>
+            <td class="mark">✓</td>
+            <td>操作提示放进游戏</td>
+            <td>标题页四条操作 + 序章教学 + 战斗内提示条（H 唤出）+ 情境提示</td>
+          </tr>
+          <tr>
+            <td class="mark">✓</td>
+            <td>另交 1 张主角卡</td>
+            <td>1920×1080 四格：一句话 / 草图 / 角色 / 游戏里的样子</td>
+          </tr>
+          <tr>
+            <td class="mark">✓</td>
+            <td>未上线可传 .html / .zip</td>
+            <td>根目录 <span style="font-family:var(--mono);font-size:11px">index.html</span> + 素材即完整可玩包</td>
+          </tr>
+        </table>
+      </div>
+    </section>
+
+    <!-- 11 评委四问 -->
+    <section class="slide" data-title="分 9：评委四问">
+      <div class="kicker"><span class="dot"></span>PART 5 <b>//</b> 分 · 评审</div>
+      <h2 class="anim">评委看四件事，<em>我们逐条对上</em></h2>
+
+      <div class="body">
+        <div class="grid-2 anim" style="align-items:stretch;">
+          <div class="card"><span class="idx">01 · 一看就会玩</span><h3>没有攻击键</h3><p>只有 4 个操作；第一夜只有最慢的游光，前 30 秒不会死，边玩边学会转盾。</p></div>
+          <div class="card"><span class="idx">02 · 能完整玩一局</span><h3>有开头也有终点</h3><p>七夜剧情 + 结局文本 + 结局面板；第七夜清场即结束，不会无限刷。</p></div>
+          <div class="card"><span class="idx">03 · 主角有记忆点</span><h3>说得出，也画得出</h3><p>两点眼睛、两条光带、只归还不开火——一句话讲清，50 像素也认得出。</p></div>
+          <div class="card"><span class="idx">04 · 玩完还想再来</span><h3>通关之后还有夜</h3><p>无尽模式爬分、本地记录最远夜、失败与通关一键重开。</p></div>
+        </div>
+
+        <div class="spread anim" style="gap:16px;">
+          <div class="stat"><b>8–12</b><span>MIN 一局时长</span></div>
+          <div class="stat"><b>40–90</b><span>SEC 一夜节奏</span></div>
+          <div class="stat"><b>×4.5</b><span>MAX 连击倍率</span></div>
+          <div class="stat"><b>0</b><span>BUG 自测错误数</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 12 总 -->
+    <section class="slide" data-title="收束：三句话">
+      <div class="kicker"><span class="dot"></span>PART 6 <b>//</b> 总</div>
+      <h2 class="anim">所以，这不只是一款小游戏</h2>
+      <p class="lead anim">它是一次「<strong>把赛道要求做成产品</strong>」的完整练习：有规则、有角色、有流程、有交付。</p>
+
+      <div class="body">
+        <div class="grid-3 anim" style="align-items:stretch;">
+          <div class="card" style="padding:24px;">
+            <span class="idx">ONE</span>
+            <h3 style="font-size:22px;">一个只反弹的玩法</h3>
+            <p style="font-size:13.5px;">零学习成本，高上限。它让"一看就会玩"变成一句可以验证的话。</p>
+          </div>
+          <div class="card" style="padding:24px;">
+            <span class="idx">TWO</span>
+            <h3 style="font-size:22px;">一个记得住的主角</h3>
+            <p style="font-size:13.5px;">阿镜不是皮肤，而是规则本身：她没有武器，所以只能归还。</p>
+          </div>
+          <div class="card" style="padding:24px;">
+            <span class="idx">THREE</span>
+            <h3 style="font-size:22px;">一个能守下去的夜</h3>
+            <p style="font-size:13.5px;">七夜给完整的一局，无尽给"再来一局"的理由。</p>
+          </div>
+        </div>
+
+        <p class="lead anim" style="font-size:16.5px;">
+          <strong>总分总：</strong>赛道一句话 → 拆成四问 → 逐个用玩法、主角、流程、交付回答 → 收束成三句话。
+        </p>
+      </div>
+    </section>
+
+    <!-- 13 结尾 -->
+    <section class="slide end" data-title="结尾 · Q&A">
+      <div class="end-bg"></div>
+      <div class="end-hero"><img src="../assets/shots/pose.png" alt="阿镜 · 游戏内"></div>
+      <div class="kicker" style="position:relative;z-index:3;"><span class="dot"></span>THANKS <b>//</b> Q&amp;A</div>
+      <h1 class="anim" style="font-size:52px;position:relative;z-index:3;">夜海没有结局，<br><span style="color:var(--cyan)">只有下一夜。</span></h1>
+
+      <div class="body" style="justify-content:space-between;position:relative;z-index:3;">
+        <div class="anim" style="max-width:560px;">
+          <p class="lead" style="margin:0;font-size:15px;">
+            现在就能玩：手机直接打开链接，转好第一面盾，剩下的交给阿镜。
+          </p>
+          <div class="keys" style="margin-top:14px;">
+            <span class="pill">30 秒上手</span>
+            <span class="pill">七夜结局</span>
+            <span class="pill mag">无尽模式</span>
+            <span class="pill amber">1 张主角卡</span>
+          </div>
+        </div>
+        <div class="spread anim" style="align-items:flex-end;">
+          <div>
+            <div class="sub" style="margin-bottom:8px;">PLAY NOW</div>
+            <div style="font-family:var(--mono);font-size:18px;color:var(--cyan);text-shadow:0 0 22px rgba(109,247,255,0.45);">
+              holmesz.github.io/prism-seventh-night
+            </div>
+            <div class="sub" style="margin-top:12px;">主角卡 · /docs/character-card.html &nbsp;|&nbsp; 源码 · github.com/HolmesZ/prism-seventh-night</div>
+          </div>
+          <div class="keys">
+            <span class="pill">1024 切磋大会</span>
+            <span class="pill mag">游戏赛道</span>
+            <span class="pill amber">让人想再玩一局</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- chrome -->
+    <div class="chrome">
+      <span class="counter"><b id="cur">01</b> / <span id="total">13</span></span>
+      <span class="hint" id="title">封面</span>
+      <span class="bar"><i id="prog"></i></span>
+      <span class="hint">← → 翻页 · O 目录</span>
+    </div>
+
+    <!-- toc -->
+    <div id="toc">
+      <div class="kicker"><span class="dot"></span>OUTLINE <b>//</b> 目录 · 总 → 分 → 总</div>
+      <div class="list" id="tocList"></div>
+      <div class="sub">按 O 或 Esc 关闭 · 点击任意条目跳转</div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+(() => {
+  'use strict';
+
+  const stage = document.getElementById('stage');
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const cur = document.getElementById('cur');
+  const total = document.getElementById('total');
+  const titleEl = document.getElementById('title');
+  const prog = document.getElementById('prog');
+  const toc = document.getElementById('toc');
+  const tocList = document.getElementById('tocList');
+
+  let index = 0;
+  let tocOpen = false;
+
+  const pad2 = (n) => String(n).padStart(2, '0');
+
+  function fit() {
+    const scale = Math.min(window.innerWidth / 1280, window.innerHeight / 720);
+    stage.style.transform = `scale(${scale})`;
+  }
+
+  function show(next, pushHash = true) {
+    index = Math.max(0, Math.min(slides.length - 1, next));
+    slides.forEach((slide, i) => {
+      const on = i === index;
+      slide.classList.toggle('on', on);
+      if (on) {
+        // restart entry animations
+        slide.querySelectorAll('.anim').forEach((el) => {
+          el.style.animation = 'none';
+          void el.offsetWidth;
+          el.style.animation = '';
+        });
+      }
+    });
+    cur.textContent = pad2(index + 1);
+    titleEl.textContent = slides[index].dataset.title || '';
+    prog.style.width = `${((index + 1) / slides.length) * 100}%`;
+    document.title = `${pad2(index + 1)}/${pad2(slides.length)} · ${slides[index].dataset.title || ''} — 棱镜逆流 · 第七夜 路演`;
+    if (pushHash) {
+      try { history.replaceState(null, '', `#${index + 1}`); } catch (_) { /* file:// */ }
+    }
+  }
+
+  function toggleToc(force) {
+    tocOpen = force == null ? !tocOpen : force;
+    toc.classList.toggle('on', tocOpen);
+    if (tocOpen) {
+      const active = tocList.querySelector(`[data-jump="${index}"]`);
+      if (active) active.focus({ preventScroll: true });
+    }
+  }
+
+  slides.forEach((slide, i) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.dataset.jump = String(i);
+    btn.innerHTML = `<i>${pad2(i + 1)}</i><b>${slide.dataset.title || ''}</b>`;
+    btn.addEventListener('click', () => {
+      show(i);
+      toggleToc(false);
+    });
+    tocList.appendChild(btn);
+  });
+
+  total.textContent = pad2(slides.length);
+
+  window.addEventListener('keydown', (e) => {
+    const key = e.key;
+    if (key === 'Escape') {
+      if (tocOpen) toggleToc(false);
+      return;
+    }
+    if (key === 'o' || key === 'O') {
+      e.preventDefault();
+      toggleToc();
+      return;
+    }
+    if (tocOpen) return;
+    if (['ArrowRight', 'ArrowDown', 'PageDown', ' ', 'Enter'].includes(key)) {
+      e.preventDefault();
+      show(index + 1);
+    } else if (['ArrowLeft', 'ArrowUp', 'PageUp', 'Backspace'].includes(key)) {
+      e.preventDefault();
+      show(index - 1);
+    } else if (key === 'Home') {
+      e.preventDefault();
+      show(0);
+    } else if (key === 'End') {
+      e.preventDefault();
+      show(slides.length - 1);
+    }
+  });
+
+  stage.addEventListener('click', (e) => {
+    if (tocOpen) return;
+    if (e.target.closest('#toc, .chrome, a, button')) return;
+    const rect = stage.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width;
+    if (x > 0.72) show(index + 1);
+    else if (x < 0.16) show(index - 1);
+  });
+
+  let touchX = null;
+  stage.addEventListener('touchstart', (e) => {
+    touchX = e.touches[0].clientX;
+  }, { passive: true });
+  stage.addEventListener('touchend', (e) => {
+    if (touchX == null) return;
+    const dx = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx) > 46) show(index + (dx < 0 ? 1 : -1));
+    touchX = null;
+  }, { passive: true });
+
+  window.addEventListener('resize', fit);
+
+  // deep link #3
+  const fromHash = parseInt(String(location.hash).replace('#', ''), 10);
+  fit();
+  show(Number.isFinite(fromHash) && fromHash > 0 ? fromHash - 1 : 0, false);
+})();
+</script>
+</body>
+</html>

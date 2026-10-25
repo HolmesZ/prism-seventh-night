@@ -15,6 +15,7 @@
 | 入口 | 链接 |
 | --- | --- |
 | 🎮 **直接开玩** | **https://holmesz.github.io/prism-seventh-night/** |
+| 🎤 路演 PPT（HTML） | https://holmesz.github.io/prism-seventh-night/docs/pitch.html |
 | 🪪 主角卡（网页版） | https://holmesz.github.io/prism-seventh-night/docs/character-card.html |
 | 💻 源码仓库 | https://github.com/HolmesZ/prism-seventh-night |
 | 🖼️ 主角卡（PNG） | [assets/character-card.png](assets/character-card.png) |
@@ -124,7 +125,8 @@ npx serve .                 # 或 python -m http.server 8080
 │   ├── GAME-BACKGROUND.md      # 游戏背景 / 世界观设定
 │   ├── CHARACTER-CARD.md       # 主角卡（文字版 + 生成 prompt）
 │   ├── DESIGN-NOTES.md         # 设计说明与技术实现
-│   └── character-card.html     # 主角卡排版源文件（导出 PNG 用）
+│   ├── character-card.html     # 主角卡排版源文件（导出 PNG 用）
+│   └── pitch.html              # 路演 PPT（HTML 幻灯片，13 页，方向键翻页）
 ├── .github/workflows/pages.yml # 自动部署到 GitHub Pages
 └── LICENSE
 ```
