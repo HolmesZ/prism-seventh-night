@@ -1,0 +1,131 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 820" width="640" height="820" role="img" aria-label="阿镜 · 最后一位守夜人">
+  <title>阿镜 A-JING</title>
+  <desc>一枚由灯塔碎片化成的守夜精灵：竖立的棱镜身躯、两点青色眼睛、两条不听话的光带。</desc>
+  <defs>
+    <radialGradient id="halo" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#6df7ff" stop-opacity="0.3"/>
+      <stop offset="52%" stop-color="#3aa8d8" stop-opacity="0.09"/>
+      <stop offset="100%" stop-color="#6df7ff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="coreGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/>
+      <stop offset="30%" stop-color="#ffd6f6" stop-opacity="0.8"/>
+      <stop offset="62%" stop-color="#ff58d8" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#ff58d8" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="body" x1="0.15" y1="0" x2="0.8" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="16%" stop-color="#d9feff"/>
+      <stop offset="42%" stop-color="#6fe9fa"/>
+      <stop offset="70%" stop-color="#2288a8"/>
+      <stop offset="88%" stop-color="#0d3f57"/>
+      <stop offset="100%" stop-color="#061b29"/>
+    </linearGradient>
+    <linearGradient id="bodyShade" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#04121c" stop-opacity="0.55"/>
+      <stop offset="46%" stop-color="#04121c" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#04121c" stop-opacity="0.42"/>
+    </linearGradient>
+    <linearGradient id="facet" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.72"/>
+      <stop offset="100%" stop-color="#a9fbff" stop-opacity="0.05"/>
+    </linearGradient>
+    <linearGradient id="ribbonL" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#eafeff" stop-opacity="0.9"/>
+      <stop offset="42%" stop-color="#6df7ff" stop-opacity="0.55"/>
+      <stop offset="100%" stop-color="#8d7bff" stop-opacity="0.05"/>
+    </linearGradient>
+    <linearGradient id="ribbonR" x1="1" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fff2fb" stop-opacity="0.85"/>
+      <stop offset="45%" stop-color="#ff9be8" stop-opacity="0.45"/>
+      <stop offset="100%" stop-color="#ff58d8" stop-opacity="0.04"/>
+    </linearGradient>
+    <filter id="soft" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="16"/>
+    </filter>
+    <filter id="glowS" x="-120%" y="-120%" width="340%" height="340%">
+      <feGaussianBlur stdDeviation="5"/>
+    </filter>
+    <filter id="glowM" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="9"/>
+    </filter>
+  </defs>
+
+  <!-- ambient -->
+  <ellipse cx="320" cy="380" rx="300" ry="330" fill="url(#halo)"/>
+  <ellipse cx="320" cy="646" rx="132" ry="20" fill="#6df7ff" opacity="0.16" filter="url(#soft)"/>
+
+  <!-- halo rings -->
+  <ellipse cx="320" cy="296" rx="150" ry="34" fill="none" stroke="#6df7ff" stroke-opacity="0.26" stroke-width="1.4" stroke-dasharray="2 9"/>
+  <path d="M206 250 A150 44 0 0 0 434 250" fill="none" stroke="#b8feff" stroke-opacity="0.5" stroke-width="1.6"/>
+  <path d="M196 340 A150 40 0 0 0 444 340" fill="none" stroke="#8d7bff" stroke-opacity="0.32" stroke-width="1.2"/>
+
+  <!-- ribbons (behind body) -->
+  <g fill="none" stroke-linecap="round">
+    <path d="M264 322 C196 350 148 424 168 502 C182 566 146 622 90 660" stroke="url(#ribbonL)" stroke-width="13" opacity="0.85"/>
+    <path d="M264 322 C196 350 148 424 168 502 C182 566 146 622 90 660" stroke="#eafeff" stroke-width="3" opacity="0.55"/>
+    <path d="M376 320 C446 344 496 416 476 500 C462 562 502 614 558 646" stroke="url(#ribbonR)" stroke-width="11" opacity="0.8"/>
+    <path d="M376 320 C446 344 496 416 476 500 C462 562 502 614 558 646" stroke="#fff2fb" stroke-width="2.6" opacity="0.5"/>
+  </g>
+  <path d="M90 646 l6 14 14 6 -14 6 -6 14 -6 -14 -14 -6 14 -6z" fill="#b8feff" opacity="0.85" filter="url(#glowS)"/>
+  <path d="M558 634 l5 11 11 5 -11 5 -5 11 -5 -11 -11 -5 11 -5z" fill="#ff9be8" opacity="0.8" filter="url(#glowS)"/>
+
+  <!-- floating shards -->
+  <g opacity="0.55">
+    <path d="M180 236 l9 15 -9 15 -9 -15z" fill="none" stroke="#8ff6ff" stroke-width="1.2"/>
+    <path d="M472 210 l7 12 -7 12 -7 -12z" fill="none" stroke="#ff9be8" stroke-width="1.2"/>
+    <path d="M148 452 l6 10 -6 10 -6 -10z" fill="none" stroke="#8d7bff" stroke-width="1.1"/>
+    <path d="M500 396 l6 10 -6 10 -6 -10z" fill="none" stroke="#8ff6ff" stroke-width="1.1"/>
+  </g>
+
+  <!-- body -->
+  <g>
+    <path d="M320 168 L400 300 L384 512 L320 616 L256 512 L240 300 Z" fill="url(#body)"/>
+    <path d="M320 168 L400 300 L384 512 L320 616 L256 512 L240 300 Z" fill="url(#bodyShade)"/>
+    <path d="M320 168 L400 300 L384 512 L320 616 L256 512 L240 300 Z" fill="none" stroke="#dcfeff" stroke-width="1.6" stroke-opacity="0.72"/>
+
+    <!-- facets -->
+    <g stroke="url(#facet)" stroke-width="1.2" fill="none" stroke-opacity="0.8">
+      <path d="M320 168 L320 616"/>
+      <path d="M240 300 L320 372 L400 300"/>
+      <path d="M256 512 L320 430 L384 512"/>
+      <path d="M240 300 L320 268 L400 300"/>
+      <path d="M320 372 L320 430"/>
+    </g>
+
+    <!-- inner light -->
+    <ellipse cx="320" cy="440" rx="62" ry="72" fill="url(#coreGlow)" opacity="0.9"/>
+    <circle cx="320" cy="440" r="17" fill="#fff6fd" opacity="0.95"/>
+    <circle cx="320" cy="440" r="30" fill="none" stroke="#ff9be8" stroke-opacity="0.55" stroke-width="1.2"/>
+
+    <!-- 第七夜 mark: seven sparks around the core -->
+    <g fill="#ffd9f7" opacity="0.85">
+      <circle cx="320" cy="388" r="2.1"/>
+      <circle cx="351" cy="399" r="1.8"/>
+      <circle cx="366" cy="427" r="1.8"/>
+      <circle cx="360" cy="461" r="1.8"/>
+      <circle cx="336" cy="487" r="1.8"/>
+      <circle cx="304" cy="487" r="1.8"/>
+      <circle cx="280" cy="461" r="1.8"/>
+      <circle cx="274" cy="427" r="1.8"/>
+      <circle cx="289" cy="399" r="1.8"/>
+    </g>
+
+    <!-- eyes -->
+    <g>
+      <ellipse cx="298" cy="352" rx="13" ry="21" fill="#6df7ff" opacity="0.55" filter="url(#glowM)"/>
+      <ellipse cx="342" cy="352" rx="13" ry="21" fill="#6df7ff" opacity="0.55" filter="url(#glowM)"/>
+      <rect x="293" y="338" width="11" height="28" rx="5.5" fill="#f2ffff"/>
+      <rect x="337" y="338" width="11" height="28" rx="5.5" fill="#f2ffff"/>
+      <rect x="296" y="344" width="5" height="9" rx="2.5" fill="#0a2c3e" opacity="0.55"/>
+      <rect x="340" y="344" width="5" height="9" rx="2.5" fill="#0a2c3e" opacity="0.55"/>
+    </g>
+
+    <!-- specular -->
+    <path d="M292 214 L318 300 L302 356 L276 286 Z" fill="#ffffff" opacity="0.22"/>
+    <path d="M352 470 L366 500 L352 536 L338 498 Z" fill="#ffffff" opacity="0.1"/>
+  </g>
+
+  <!-- rim light -->
+  <path d="M320 168 L400 300 L384 512 L320 616 L256 512 L240 300 Z" fill="none" stroke="#b8feff" stroke-width="3" stroke-opacity="0.22" filter="url(#glowS)"/>
+</svg>

@@ -1,0 +1,16 @@
+# OS / 编辑器
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# 依赖 / 构建产物（本作零依赖，仅防御）
+node_modules/
+dist/
+_site/
+*.log
+
+# 本地临时
+_tmp/
+*.zip

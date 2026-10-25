@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 820" width="640" height="820" role="img" aria-label="阿镜 · 概念草图">
+  <title>阿镜 · 概念草图</title>
+  <desc>一句话生成的第一步：线稿草图。竖立棱镜身躯、两点眼睛、两条光带。</desc>
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 H0 V40" fill="none" stroke="#6df7ff" stroke-opacity="0.07" stroke-width="1"/>
+    </pattern>
+    <radialGradient id="fade" cx="50%" cy="45%" r="55%">
+      <stop offset="0%" stop-color="#6df7ff" stop-opacity="0.1"/>
+      <stop offset="100%" stop-color="#6df7ff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <rect width="640" height="820" fill="#04070f"/>
+  <rect width="640" height="820" fill="url(#grid)"/>
+  <ellipse cx="320" cy="400" rx="300" ry="320" fill="url(#fade)"/>
+
+  <!-- construction guides -->
+  <g stroke="#6df7ff" stroke-opacity="0.3" stroke-width="1" fill="none">
+    <path d="M320 120 V700" stroke-dasharray="6 10"/>
+    <path d="M150 300 H490" stroke-dasharray="4 12"/>
+    <path d="M170 352 H470" stroke-dasharray="2 14" stroke-opacity="0.2"/>
+    <circle cx="320" cy="440" r="96" stroke-dasharray="3 10" stroke-opacity="0.25"/>
+    <ellipse cx="320" cy="300" rx="150" ry="34" stroke-dasharray="2 9" stroke-opacity="0.22"/>
+    <path d="M320 168 L470 300 L320 372 L170 300 Z" stroke-opacity="0.16"/>
+    <path d="M320 372 L420 616 H220 Z" stroke-opacity="0.1"/>
+  </g>
+
+  <!-- silhouette outline -->
+  <g fill="none" stroke="#cbfeff" stroke-width="2" stroke-linejoin="round" stroke-linecap="round">
+    <path d="M320 168 L400 300 L384 512 L320 616 L256 512 L240 300 Z"/>
+    <path d="M240 300 L320 372 L400 300"/>
+    <path d="M256 512 L320 430 L384 512" stroke-opacity="0.6"/>
+    <path d="M320 168 V616" stroke-opacity="0.35" stroke-dasharray="5 7"/>
+    <path d="M264 322 C196 350 148 424 168 502 C182 566 146 622 90 660" stroke-opacity="0.9"/>
+    <path d="M376 320 C446 344 496 416 476 500 C462 562 502 614 558 646" stroke-opacity="0.7"/>
+  </g>
+
+  <!-- eyes -->
+  <g fill="#cbfeff" opacity="0.85">
+    <rect x="293" y="338" width="11" height="28" rx="5.5"/>
+    <rect x="337" y="338" width="11" height="28" rx="5.5"/>
+  </g>
+
+  <!-- annotations -->
+  <g font-family="'Cascadia Code',Consolas,monospace" font-size="13" fill="#6df7ff" fill-opacity="0.62">
+    <text x="92" y="150">FIG.01 — 主体：竖立的棱镜</text>
+    <text x="92" y="172">身体即盾牌，没有武器</text>
+    <text x="424" y="330">EYE / 记忆点 01</text>
+    <text x="424" y="348">两点青色眼睛</text>
+    <text x="64" y="700">RIBBON / 记忆点 02 — 两条不听话的光带</text>
+    <text x="64" y="720">左：第一位守夜人留下 · 右：第六位留下</text>
+  </g>
+  <g stroke="#6df7ff" stroke-opacity="0.42" stroke-width="1" fill="none">
+    <path d="M330 330 H418"/>
+    <path d="M420 690 H540"/>
+  </g>
+</svg>

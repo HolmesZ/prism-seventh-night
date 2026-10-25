@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>主角卡 · 阿镜 A-JING | 棱镜逆流 · 第七夜</title>
+<style>
+  :root {
+    --ink: #03060c;
+    --cyan: #6df7ff;
+    --cyan-strong: #c8feff;
+    --magenta: #ff58d8;
+    --amber: #ffc46b;
+    --line: rgba(109, 247, 255, 0.18);
+    --muted: rgba(190, 226, 242, 0.62);
+    --display: "Bahnschrift", "DIN Alternate", "Arial Narrow", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+    --body: "Segoe UI", "Noto Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+    --mono: "Cascadia Code", Consolas, "Liberation Mono", monospace;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #05080f;
+    color: var(--cyan-strong);
+    font-family: var(--body);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .card {
+    position: relative;
+    width: 1920px;
+    height: 1080px;
+    padding: 54px 64px 40px;
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse 62% 55% at 50% 44%, rgba(18, 62, 92, 0.55), transparent 70%),
+      radial-gradient(ellipse 40% 40% at 18% 12%, rgba(255, 88, 216, 0.1), transparent 70%),
+      radial-gradient(ellipse 40% 40% at 86% 84%, rgba(109, 247, 255, 0.09), transparent 70%),
+      #03060c;
+  }
+
+  .card::before {
+    content: "";
+    position: absolute;
+    inset: 22px;
+    border: 1px solid var(--line);
+    pointer-events: none;
+  }
+
+  .card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(109, 247, 255, 0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(109, 247, 255, 0.035) 1px, transparent 1px);
+    background-size: 80px 80px;
+    mask-image: radial-gradient(ellipse at 50% 50%, #000 30%, transparent 78%);
+    -webkit-mask-image: radial-gradient(ellipse at 50% 50%, #000 30%, transparent 78%);
+    pointer-events: none;
+  }
+
+  .head {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 18px;
+  }
+
+  .kicker {
+    display: block;
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.34em;
+    color: rgba(109, 247, 255, 0.6);
+    margin-bottom: 10px;
+  }
+
+  .title {
+    margin: 0;
+    font-family: var(--display);
+    font-size: 40px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: #eafeff;
+    text-shadow: 0 0 40px rgba(109, 247, 255, 0.35);
+  }
+
+  .head-right {
+    text-align: right;
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1.9;
+    letter-spacing: 0.16em;
+    color: rgba(190, 226, 242, 0.5);
+  }
+
+  .head-right b { color: var(--cyan); font-weight: 600; }
+
+  .body {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    grid-template-columns: 470px 1fr 520px;
+    gap: 34px;
+    height: 806px;
+    padding-top: 30px;
+  }
+
+  .col { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+
+  .block {
+    border: 1px solid var(--line);
+    background: linear-gradient(180deg, rgba(9, 26, 40, 0.62), rgba(4, 9, 16, 0.4));
+    padding: 18px 20px;
+  }
+
+  .block-head {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+
+  .num {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: rgba(109, 247, 255, 0.55);
+  }
+
+  .block-head h2 {
+    margin: 0;
+    font-family: var(--display);
+    font-size: 17px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: #dffcff;
+  }
+
+  .block-head em {
+    font-style: normal;
+    font-family: var(--mono);
+    font-size: 9.5px;
+    letter-spacing: 0.2em;
+    color: rgba(190, 226, 242, 0.35);
+    margin-left: auto;
+  }
+
+  .prompt-text {
+    margin: 0;
+    font-size: 19px;
+    line-height: 1.85;
+    color: var(--cyan-strong);
+    border-left: 2px solid var(--cyan);
+    padding-left: 14px;
+  }
+
+  .prompt-note {
+    margin: 12px 0 0;
+    font-size: 12.5px;
+    line-height: 1.7;
+    color: rgba(190, 226, 242, 0.45);
+  }
+
+  .sketch-block {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    padding: 16px 18px 10px;
+  }
+
+  .sketch {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
+    overflow: hidden;
+    padding-bottom: 6px;
+  }
+
+  .sketch img { width: 100%; height: 100%; object-fit: contain; opacity: 0.9; }
+
+  .portrait {
+    position: relative;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--line);
+    background:
+      radial-gradient(ellipse 60% 55% at 50% 46%, rgba(24, 88, 124, 0.4), transparent 72%),
+      linear-gradient(180deg, rgba(8, 22, 34, 0.7), rgba(3, 7, 12, 0.5));
+    overflow: hidden;
+  }
+
+  .portrait::before {
+    content: "";
+    position: absolute;
+    width: 560px;
+    height: 560px;
+    border: 1px solid rgba(109, 247, 255, 0.14);
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .portrait img {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    max-height: 560px;
+    filter: drop-shadow(0 0 50px rgba(109, 247, 255, 0.25));
+  }
+
+  .name-plate {
+    margin-top: 16px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  .name-plate .cn {
+    font-family: var(--display);
+    font-size: 52px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    line-height: 1;
+    color: #f2feff;
+    text-shadow: 0 0 30px rgba(109, 247, 255, 0.55);
+  }
+
+  .name-plate .en {
+    font-family: var(--mono);
+    font-size: 13px;
+    letter-spacing: 0.4em;
+    color: rgba(109, 247, 255, 0.6);
+    padding-bottom: 6px;
+  }
+
+  .tagline {
+    margin: 12px 0 0;
+    font-size: 15px;
+    line-height: 1.75;
+    color: rgba(206, 236, 248, 0.66);
+  }
+
+  .ingame-frame {
+    position: relative;
+    border: 1px solid var(--line);
+    overflow: hidden;
+    background: #02060b;
+  }
+
+  .ingame-frame img {
+    display: block;
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    object-position: center 42%;
+    filter: saturate(1.05) brightness(1.02);
+  }
+
+  .ingame-cap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    border-top: 1px solid var(--line);
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    color: rgba(190, 226, 242, 0.45);
+    background: rgba(4, 10, 18, 0.8);
+  }
+
+  .ingame-cap b { color: var(--cyan); font-weight: 600; }
+
+  dl.stats {
+    margin: 0;
+    display: grid;
+    gap: 10px;
+  }
+
+  dl.stats div {
+    display: grid;
+    grid-template-columns: 74px 1fr;
+    gap: 12px;
+    align-items: baseline;
+    border-bottom: 1px dashed rgba(109, 247, 255, 0.1);
+    padding-bottom: 9px;
+  }
+
+  dl.stats div:last-child { border-bottom: 0; padding-bottom: 0; }
+
+  dt {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: rgba(109, 247, 255, 0.5);
+  }
+
+  dd {
+    margin: 0;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: rgba(222, 246, 255, 0.84);
+  }
+
+  .quote {
+    margin: 0;
+    padding: 14px 16px;
+    border: 1px dashed rgba(255, 196, 107, 0.3);
+    background: rgba(255, 196, 107, 0.05);
+    font-size: 13.5px;
+    line-height: 1.8;
+    color: rgba(255, 216, 158, 0.9);
+  }
+
+  .foot {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 14px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: rgba(190, 226, 242, 0.38);
+  }
+
+  .steps { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .steps b { color: var(--cyan); font-weight: 600; }
+  .steps i { color: rgba(109, 247, 255, 0.3); font-style: normal; }
+</style>
+</head>
+<body>
+<div class="card">
+  <header class="head">
+    <div>
+      <span class="kicker">CHARACTER CARD // 主角卡</span>
+      <h1 class="title">棱镜逆流 · 第七夜</h1>
+    </div>
+    <div class="head-right">
+      NO.07 · 守夜序列<br>
+      <b>PRISM: THE SEVENTH NIGHT</b><br>
+      浏览器 / 手机即开即玩
+    </div>
+  </header>
+
+  <div class="body">
+    <div class="col">
+      <section class="block">
+        <div class="block-head">
+          <span class="num">01</span>
+          <h2>一句话</h2>
+          <em>PROMPT</em>
+        </div>
+        <p class="prompt-text">「一枚会记住光的棱镜，把射向星核的子弹，一颗一颗还回去。」</p>
+        <p class="prompt-note">由这一句生成：身份（守夜人）＋形态（竖立的棱镜）＋动作（还回去）＋情绪（记得）。</p>
+      </section>
+
+      <section class="block sketch-block">
+        <div class="block-head">
+          <span class="num">02</span>
+          <h2>草图</h2>
+          <em>SKETCH</em>
+        </div>
+        <div class="sketch">
+          <img src="../assets/ajing-sketch.svg" alt="阿镜的概念草图">
+        </div>
+      </section>
+    </div>
+
+    <div class="col">
+      <div class="portrait">
+        <img src="../assets/ajing.svg" alt="阿镜：竖立的棱镜身躯、两点青色眼睛、两条光带">
+      </div>
+      <div class="name-plate">
+        <span class="cn">阿镜</span>
+        <span class="en">A-JING</span>
+      </div>
+      <p class="tagline">第七夜守夜人。她没有武器，只把自己竖在灯前——<br>任何撞上来的光，都会原路返回。</p>
+    </div>
+
+    <div class="col">
+      <section class="block" style="padding:12px;">
+        <div class="block-head" style="margin:6px 6px 10px;">
+          <span class="num">03</span>
+          <h2>游戏里的样子</h2>
+          <em>IN-GAME</em>
+        </div>
+        <figure class="ingame-frame" style="margin:0;">
+          <img src="../assets/shots/play.png" alt="游戏内画面">
+          <figcaption class="ingame-cap"><span>REALTIME 2D CANVAS</span><b>星核 · 守夜进行中</b></figcaption>
+        </figure>
+      </section>
+
+      <section class="block">
+        <div class="block-head">
+          <span class="num">04</span>
+          <h2>档案</h2>
+          <em>PROFILE</em>
+        </div>
+        <dl class="stats">
+          <div><dt>身份</dt><dd>星核的第七位守夜人，一枚灯塔碎片</dd></div>
+          <div><dt>记忆点</dt><dd>两点青色眼睛 · 两条不听话的光带（第一位与第六位留下的）</dd></div>
+          <div><dt>能力</dt><dd>折射归还 / 脉冲 / 棱镜新星（全场减速）</dd></div>
+          <div><dt>弱点</dt><dd>不能主动开火；星核完整度归零，她就碎</dd></div>
+        </dl>
+      </section>
+
+      <p class="quote">「子弹不是给我，是给灯的。我只是把它们送回去。」</p>
+    </div>
+  </div>
+
+  <footer class="foot">
+    <div class="steps">
+      <b>一句话</b><i>→</i><b>草图</b><i>→</i><b>角色</b><i>→</i><b>游戏内</b>
+    </div>
+    <div>AI 生成角色与道具 · AI 编程工具制作 · 1024 切磋大会 · 游戏赛道</div>
+  </footer>
+</div>
+</body>
+</html>

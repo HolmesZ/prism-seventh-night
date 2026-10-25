@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#03050c">
+  <meta name="description" content="PRISM 第七夜：一枚会记住光的棱镜，把射向星核的子弹一颗一颗还回去。七夜守灯，浏览器即开即玩。">
+  <meta name="author" content="Holmes Zhi">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="棱镜逆流 · 第七夜 | PRISM: The Seventh Night">
+  <meta property="og:description" content="一枚会记住光的棱镜，把射向星核的子弹，一颗一颗还回去。七夜守灯，浏览器即开即玩。">
+  <meta property="og:image" content="assets/shots/menu.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%2303050c'/%3E%3Cpath d='M32 7 51 26 45 51 19 51 13 26Z' fill='none' stroke='%236df7ff' stroke-width='3'/%3E%3Ccircle cx='32' cy='34' r='4' fill='%23ff58d8'/%3E%3C/svg%3E">
+  <title>棱镜逆流 · 第七夜 | PRISM: The Seventh Night</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main id="stage">
+    <canvas id="game" aria-label="棱镜逆流 · 第七夜 游戏画面"></canvas>
+    <div class="scanlines" aria-hidden="true"></div>
+    <div class="vignette" aria-hidden="true"></div>
+
+    <header id="hud" class="hud" hidden>
+      <div class="hud-left">
+        <div class="metric metric-wave">
+          <span class="metric-label">NIGHT</span>
+          <strong><span id="waveNum">01</span><small id="nightTotal">/07</small></strong>
+        </div>
+        <div class="metric metric-score">
+          <span class="metric-label">SCORE</span>
+          <strong id="scoreNum">000000</strong>
+        </div>
+      </div>
+
+      <div class="hud-center">
+        <div id="hpPips" class="pips" aria-label="星核完整度"></div>
+        <div id="comboWrap" class="combo">
+          <span class="combo-label">COMBO</span>
+          <strong id="comboNum">×1.0</strong>
+          <i class="combo-track"><b id="comboBar"></b></i>
+        </div>
+      </div>
+
+      <div class="hud-right">
+        <div class="best">BEST <b id="bestNum">000000</b></div>
+        <button id="legendBtn" class="icon-btn" type="button" aria-label="操作提示" aria-pressed="false" title="操作提示 (H)">?</button>
+        <button id="soundBtn" class="icon-btn" type="button" aria-label="切换声音" aria-pressed="true">SND</button>
+        <button id="fullscreenBtn" class="icon-btn icon-full" type="button" aria-label="切换全屏" aria-pressed="false" title="全屏">⛶</button>
+        <button id="pauseBtn" class="icon-btn icon-pause" type="button" aria-label="暂停游戏">II</button>
+      </div>
+    </header>
+
+    <div id="legend" class="legend" hidden aria-live="polite"></div>
+
+    <div id="bossBar" class="boss-bar" hidden>
+      <div class="boss-meta">
+        <span>WARDEN <i>// 终夜守卫</i></span>
+        <b id="bossHpText">100%</b>
+      </div>
+      <div class="boss-track"><i id="bossFill"></i></div>
+    </div>
+
+    <div id="announce" class="announce" aria-live="polite">
+      <span id="announceKicker" class="announce-kicker">NIGHTFALL // 第七夜</span>
+      <strong id="announceTitle">第一夜</strong>
+      <span id="announceSub" class="announce-sub">灯油只剩最后一滴</span>
+    </div>
+
+    <div id="hint" class="hint" aria-live="polite"></div>
+
+    <div id="novaReady" class="nova-ready">
+      <span>PRISM NOVA</span>
+      <small id="novaHint">右键 / E</small>
+    </div>
+
+    <div id="touchControls" class="touch-controls" aria-hidden="true">
+      <button id="touchPulse" type="button"><b>◉</b><span>脉冲</span></button>
+      <button id="touchNova" type="button"><b>✦</b><span>新星</span></button>
+    </div>
+
+    <div id="touchStick" class="touch-stick touch-stick-move" aria-hidden="true">
+      <i id="touchKnob"></i>
+      <span>移动</span>
+    </div>
+
+    <div id="touchAimStick" class="touch-stick touch-stick-aim" aria-hidden="true">
+      <i id="touchAimKnob"></i>
+      <span>盾向</span>
+    </div>
+
+    <section id="menu" class="overlay overlay-menu">
+      <button id="menuFsBtn" class="menu-fs" type="button" aria-label="切换全屏" aria-pressed="false">
+        <b>⛶</b><span id="menuFsLabel">全屏</span>
+      </button>
+      <div class="menu-grid">
+        <div class="menu-main">
+          <div class="eyebrow">
+            <span class="signal-dot"></span>
+            <span>SEVEN NIGHTS PROTOCOL</span>
+            <b>// 07</b>
+          </div>
+
+          <h1 class="logo" aria-label="PRISM 棱镜逆流 第七夜">
+            <span class="logo-main" data-text="PRISM">PRISM</span>
+            <span class="logo-cn">棱镜 · 第七夜</span>
+          </h1>
+
+          <p class="lede">
+            星核只剩七夜。她不攻击，她只归还。<br>
+            <em>把每一发子弹，送回它来的地方。</em>
+          </p>
+
+          <div class="menu-actions">
+            <button id="startBtn" class="btn-primary" type="button">
+              <span>开始第七夜</span>
+              <span class="btn-key">ENTER</span>
+            </button>
+            <div class="menu-actions-sub">
+              <button id="endlessBtn" class="btn-secondary" type="button">无尽守夜</button>
+              <button id="codexBtn" class="btn-secondary" type="button">主角档案</button>
+              <button id="loreBtn" class="btn-secondary" type="button">世界观</button>
+            </div>
+          </div>
+
+          <div class="control-row">
+            <span><b>鼠标 / ← →</b> 旋转棱镜</span>
+            <span><b>WASD</b> 移动</span>
+            <span><b>左键 / Space</b> 脉冲</span>
+            <span><b>右键 / E</b> 棱镜新星</span>
+          </div>
+
+          <div class="touch-guide">
+            <b>TOUCH</b>
+            <span>左摇杆移动 · 右摇杆控制盾向 · 技能按钮环绕右侧 · 随时可暂停</span>
+          </div>
+
+          <div class="menu-meta">
+            <span>浏览器 / 手机即开即玩</span>
+            <i></i>
+            <span>七夜剧情 + 无尽模式</span>
+            <i></i>
+            <span>建议开启声音</span>
+          </div>
+        </div>
+
+        <aside class="menu-side">
+          <button class="side-card side-card-hero" id="heroCardBtn" type="button">
+            <div class="side-num">00</div>
+            <div>
+              <strong>阿镜 A-JING</strong>
+              <p>第七夜守夜人。身体是一枚棱镜，胸口亮着九点星火。点这里看主角卡。</p>
+            </div>
+          </button>
+          <div class="side-card">
+            <div class="side-num">01</div>
+            <div>
+              <strong>她只归还</strong>
+              <p>移动鼠标，让弧形护盾迎向橙色弹道。她没有武器，反弹就是她的武器。</p>
+            </div>
+          </div>
+          <div class="side-card">
+            <div class="side-num">02</div>
+            <div>
+              <strong>两条光带</strong>
+              <p>左侧是第一位守夜人，右侧是第六位。她们还记得怎么把光送回去。</p>
+            </div>
+          </div>
+          <div class="side-card side-card-repair">
+            <div class="side-num">03</div>
+            <div>
+              <strong>撑过七夜</strong>
+              <p>星核完整度上限 5。每夜清场 +1；绿色碎片恢复 1 点；击破守卫者 +2。第七夜之后，还有无尽守夜。</p>
+            </div>
+          </div>
+          <div class="side-note">
+            <span>REFLECT</span><i></i><span>SURVIVE</span><i></i><span>RETURN THE LIGHT</span>
+          </div>
+        </aside>
+      </div>
+
+      <footer class="menu-footer">
+        <div class="menu-status"><span class="signal-dot small"></span> CORE SIGNAL <b id="coreSignal">STABLE</b></div>
+        <div class="menu-best">BEST RECORD <b id="menuBest">000000</b> · 最远 <b id="menuNight">—</b></div>
+        <div class="menu-version">A SMALL RITUAL IN THE DARK · v2.0 · SEVEN NIGHTS</div>
+      </footer>
+    </section>
+
+    <!-- ===================== PROLOGUE / 序章 ===================== -->
+    <section id="prologue" class="overlay overlay-modal overlay-story" hidden>
+      <div class="panel panel-story">
+        <div class="story-head">
+          <span class="panel-kicker">PROLOGUE // 序章</span>
+          <div class="story-dots" aria-hidden="true">
+            <i class="on"></i><i></i><i></i>
+          </div>
+        </div>
+
+        <div class="story-viewport">
+          <article class="story-step on">
+            <h2>星核是夜海上最后一座灯</h2>
+            <p>
+              夜海没有月亮。迷航的船靠它认路：一座悬在黑水上的灯，叫做<strong>星核</strong>。
+              灯芯是光，灯油也是光。每一夜，都会有人坐进灯里，替它添一盏。
+            </p>
+            <p class="story-quiet">第七夜，灯油只剩最后一滴。</p>
+          </article>
+
+          <article class="story-step">
+            <h2>她叫阿镜</h2>
+            <p>
+              黑潮从灯外涌来，它们不派船，只把光磨成子弹，一颗一颗打进灯里。
+              守夜人不能还手——她们没有手。她们只能是<strong>一面镜子</strong>：
+              任何光撞上来，都会原路回去。
+            </p>
+            <p>
+              阿镜是第七位守夜人。她的身体是一枚竖立的棱镜，胸口有九点星火，
+              两侧飘着两条不听话的光带——那是第一位和第六位留下的。
+            </p>
+          </article>
+
+          <article class="story-step">
+            <h2>怎么守这一夜</h2>
+            <p>撑过七夜。每一夜，黑潮都会更用力一点。</p>
+            <ul class="story-controls">
+              <li><b>鼠标 / ← →</b><span>旋转棱镜，让弧面迎向子弹</span></li>
+              <li><b>WASD</b><span>移动星核，躲开正面冲撞</span></li>
+              <li><b>左键 / Space</b><span>脉冲：震开身边的光</span></li>
+              <li><b>右键 / E</b><span>棱镜新星：能量满时让整个星图慢下来</span></li>
+            </ul>
+            <p class="story-quiet">被弹开的子弹会变成追猎敌人的光。你不必开火。</p>
+          </article>
+        </div>
+
+        <div class="panel-actions story-nav">
+          <button id="prologueSkip" class="btn-ghost" type="button">跳过序章</button>
+          <button id="prologueNext" class="btn-primary btn-small" type="button">
+            <span id="prologueNextLabel">继续</span>
+            <span class="btn-key">ENTER</span>
+          </button>
+        </div>
+        <div class="panel-foot">← → 翻页 · ESC 跳过</div>
+      </div>
+    </section>
+
+    <!-- ===================== CHARACTER / 主角卡 ===================== -->
+    <section id="character" class="overlay overlay-modal overlay-codex" hidden>
+      <div class="panel panel-codex">
+        <button class="codex-close" id="characterClose" type="button" aria-label="关闭主角卡">✕</button>
+        <div class="codex-head">
+          <span class="panel-kicker">CHARACTER CARD // 主角卡</span>
+          <span class="codex-tag">NO.07 · 守夜序列</span>
+        </div>
+        <div class="codex-body">
+          <figure class="codex-figure">
+            <img src="assets/ajing.svg" alt="阿镜：竖立的棱镜身躯、两点青色眼睛、两条光带" draggable="false">
+            <figcaption>阿镜 · A-JING</figcaption>
+            <span class="codex-figure-sub">第七夜守夜人 / 灯塔碎片</span>
+          </figure>
+          <div class="codex-info">
+            <div class="codex-prompt">
+              <span>一句话生成</span>
+              <p>「一枚会记住光的棱镜，把射向星核的子弹，一颗一颗还回去。」</p>
+            </div>
+            <dl class="codex-stats">
+              <div><dt>身份</dt><dd>星核的第七位守夜人，也是一枚灯塔碎片</dd></div>
+              <div><dt>武器</dt><dd>没有。身体即盾，反弹即攻击</dd></div>
+              <div><dt>记忆点</dt><dd>两点青色眼睛 + 两条不听话的光带</dd></div>
+              <div><dt>弱点</dt><dd>不能主动开火；星核完整度归零，她就碎</dd></div>
+            </dl>
+            <p class="codex-quote">「子弹不是给我，是给灯的。我只是把它们送回去。」</p>
+            <div class="codex-links">
+              <a class="codex-link" href="docs/character-card.html" target="_blank" rel="noopener">查看完整主角卡 ↗</a>
+              <button class="codex-link" id="loreFromCodex" type="button">读世界观 →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== LORE / 世界观 ===================== -->
+    <section id="lore" class="overlay overlay-modal overlay-codex" hidden>
+      <div class="panel panel-codex panel-lore">
+        <button class="codex-close" id="loreClose" type="button" aria-label="关闭世界观">✕</button>
+        <div class="codex-head">
+          <span class="panel-kicker">WORLD // 世界观</span>
+          <span class="codex-tag">夜海 · 星核 · 黑潮</span>
+        </div>
+        <div class="lore-body">
+          <section>
+            <h3><i>01</i>夜海</h3>
+            <p>夜海没有月亮，也没有岸。迷航的船只能在黑暗里等一座灯——它悬在黑水之上，被称作<strong>星核</strong>。星核不烧柴，它烧光：每一夜，都要有一位守夜人坐进灯里，替它添一盏。</p>
+          </section>
+          <section>
+            <h3><i>02</i>黑潮</h3>
+            <p>灯之外是<strong>黑潮</strong>。它们不派船，只把光磨成子弹，一颗一颗打进灯里，想把这座坐标从夜海上抹掉。被磨碎的光会变成弹幕，弹幕会记住来时的路。</p>
+          </section>
+          <section>
+            <h3><i>03</i>守夜人</h3>
+            <p>守夜人不能还手——她们没有手。她们只能是<strong>一面镜子</strong>：光撞上来，就原路回去。前六位守夜人一个接一个碎在灯下，只剩两条光带还缠在第七位的肩上。</p>
+          </section>
+          <section>
+            <h3><i>04</i>第七夜</h3>
+            <p>轮到<strong>阿镜</strong>。她不记得自己是怎么被拼起来的，只记得一句话：<em>把光送回去。</em> 撑过七夜，灯就还亮着；撑不过，夜海就再没有岸。第七夜之后，她还有很长的夜要守。</p>
+          </section>
+          <div class="lore-nights">
+            <h3><i>05</i>七夜</h3>
+            <ol>
+              <li><b>第一夜</b> 灯油见底 · 只有最轻的游光</li>
+              <li><b>第二夜</b> 黑潮试探 · 会瞄准的子弹</li>
+              <li><b>第三夜</b> 碎裂者 · 一颗子弹裂成三颗</li>
+              <li><b>第四夜</b> 长矛 · 蓄力后刺穿盾面</li>
+              <li><b>第五夜</b> 守卫者降临 · 第一次真正的围城</li>
+              <li><b>第六夜</b> 余烬如雨 · 快速逼近的碎火</li>
+              <li><b>第七夜</b> 最后的归还 · 终夜守卫与最后一滴灯油</li>
+            </ol>
+          </div>
+          <p class="lore-foot">夜海没有结局，只有下一夜。<a id="loreToPlay" href="#" role="button">开始第七夜 →</a></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== PAUSE ===================== -->
+    <section id="pause" class="overlay overlay-modal" hidden>
+      <div class="panel panel-pause">
+        <span class="panel-kicker">SILENCE // 暂停</span>
+        <h2>静默</h2>
+        <p class="panel-desc">星核仍在等待。阿镜只是暂时停止呼吸。</p>
+        <div class="panel-actions">
+          <button id="resumeBtn" class="btn-primary btn-small" type="button"><span>继续守夜</span><span class="btn-key">ESC</span></button>
+          <button id="quitBtn" class="btn-ghost" type="button">返回标题</button>
+        </div>
+        <div class="panel-foot">M 静音 · F 全屏 · H 操作提示</div>
+      </div>
+    </section>
+
+    <!-- ===================== GAME OVER ===================== -->
+    <section id="gameover" class="overlay overlay-modal overlay-dead" hidden>
+      <div class="panel panel-dead">
+        <span class="panel-kicker danger">SIGNAL LOST // 灯灭了</span>
+        <h2>棱镜碎了</h2>
+        <p class="panel-desc" id="gameoverDesc">余辉仍在回响。下一次，让更多子弹找到归途。</p>
+
+        <div class="result-grid">
+          <div><span>SCORE</span><b id="finalScore">000000</b></div>
+          <div><span>NIGHT</span><b id="finalWave">01</b></div>
+          <div><span>REFLECTS</span><b id="finalDeflects">0</b></div>
+          <div><span>MAX COMBO</span><b id="finalCombo">0</b></div>
+        </div>
+
+        <div id="newRecord" class="new-record" hidden>NEW RECORD · 新纪录</div>
+        <div class="final-best">历史最佳 <b id="finalBest">000000</b> · 最远 <b id="finalNight">—</b></div>
+
+        <div class="panel-actions">
+          <button id="restartBtn" class="btn-primary btn-small" type="button"><span>再走一夜</span><span class="btn-key">ENTER</span></button>
+          <button id="menuBtn" class="btn-ghost" type="button">返回标题</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== ENDING ===================== -->
+    <section id="ending" class="overlay overlay-modal overlay-ending" hidden>
+      <div class="panel panel-ending">
+        <span class="panel-kicker">THE SEVENTH NIGHT // 第七夜之后</span>
+        <h2>灯还亮着</h2>
+        <p class="panel-desc">
+          第七夜过去了。天没有亮，但灯还亮着——这就够了。<br>
+          阿镜把自己拆成七枚碎片，钉在灯的七个方向上。那是第七夜的尽头，也是下一夜的开头。
+        </p>
+
+        <div class="result-grid">
+          <div><span>SCORE</span><b id="endingScore">000000</b></div>
+          <div><span>NIGHTS</span><b id="endingNights">07</b></div>
+          <div><span>REFLECTS</span><b id="endingDeflects">0</b></div>
+          <div><span>MAX COMBO</span><b id="endingCombo">0</b></div>
+        </div>
+
+        <div class="ending-stamp">SEVEN NIGHTS CLEARED · 第一位撑到天亮的守夜人</div>
+
+        <div class="panel-actions">
+          <button id="endingEndless" class="btn-primary btn-small" type="button"><span>进入无尽守夜</span><span class="btn-key">ENTER</span></button>
+          <button id="endingRestart" class="btn-ghost" type="button">再走一夜</button>
+          <button id="endingMenu" class="btn-ghost" type="button">返回标题</button>
+        </div>
+        <div class="panel-foot">灯不需要英雄，只需要有人一直守着。</div>
+      </div>
+    </section>
+
+    <noscript>这个游戏需要启用 JavaScript。</noscript>
+  </main>
+  <script src="game.js"></script>
+</body>
+</html>
