@@ -1112,7 +1112,7 @@
       <span class="counter"><b id="cur">01</b> / <span id="total">13</span></span>
       <span class="hint" id="title">封面</span>
       <span class="bar"><i id="prog"></i></span>
-      <span class="hint">← → 翻页 · O 目录</span>
+      <span class="hint">← → / 滚轮 翻页 · O 目录</span>
     </div>
 
     <!-- toc -->
@@ -1240,6 +1240,41 @@
     if (Math.abs(dx) > 46) show(index + (dx < 0 ? 1 : -1));
     touchX = null;
   }, { passive: true });
+
+  // 滚轮 / 触控板翻页：反向滚动重置累计，翻页后短暂锁定，避免一次滑动连跳多页
+  let wheelAcc = 0;
+  let wheelLockUntil = 0;
+  let wheelIdleTimer = null;
+
+  window.addEventListener('wheel', (e) => {
+    if (tocOpen) return;
+    if (e.target && e.target.closest && e.target.closest('#toc')) return;
+    if (e.ctrlKey) return; // 保留浏览器缩放
+    if (e.cancelable) e.preventDefault();
+
+    const now = performance.now();
+    if (now < wheelLockUntil) return;
+
+    const unit = e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? 100 : 1;
+    const dy = e.deltaY * unit;
+    if (dy === 0) return;
+
+    if (wheelAcc !== 0 && Math.sign(dy) !== Math.sign(wheelAcc)) wheelAcc = 0;
+    wheelAcc += dy;
+
+    // 一段滚动结束（160ms 无新事件）就清空累计，避免惯性尾巴影响下一次
+    if (wheelIdleTimer) clearTimeout(wheelIdleTimer);
+    wheelIdleTimer = setTimeout(() => { wheelAcc = 0; }, 160);
+
+    const threshold = Math.abs(dy) > 90 ? 24 : 42;
+    if (Math.abs(wheelAcc) >= threshold) {
+      const dir = wheelAcc > 0 ? 1 : -1;
+      const discrete = Math.abs(dy) > 90; // 鼠标滚轮一格：响应更快；触控板：锁更久，防惯性连跳
+      wheelAcc = 0;
+      wheelLockUntil = now + (discrete ? 380 : 700);
+      show(index + dir);
+    }
+  }, { passive: false });
 
   window.addEventListener('resize', fit);
 

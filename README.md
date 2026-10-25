@@ -126,7 +126,7 @@ npx serve .                 # 或 python -m http.server 8080
 │   ├── CHARACTER-CARD.md       # 主角卡（文字版 + 生成 prompt）
 │   ├── DESIGN-NOTES.md         # 设计说明与技术实现
 │   ├── character-card.html     # 主角卡排版源文件（导出 PNG 用）
-│   └── pitch.html              # 路演 PPT（HTML 幻灯片，13 页，方向键翻页）
+│   └── pitch.html              # 路演 PPT（HTML 幻灯片，13 页，← → / 滚轮翻页，O 目录）
 ├── .github/workflows/pages.yml # 自动部署到 GitHub Pages
 └── LICENSE
 ```
